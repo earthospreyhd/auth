@@ -25,8 +25,12 @@ class cookie ():
     def get_user_hash (self): 
         return self.user_hash
 
+def gen_half_secret(secret):
+    half_secret = pow(2, secret, PRIME_MODULUS)
 
-def get_combined_secret ():
+    return half_secret
+
+def get_combined_secret (user_secret, server_secret):
     combined_secret = pow(2, user_secret * server_secret, PRIME_MODULUS)
 
     return combined_secret

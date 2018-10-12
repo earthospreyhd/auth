@@ -10,9 +10,17 @@ def get_db():
 
     return db
 
-def add_user(email, inc, dblink, devID):
+# def add_user(email, inc, dblink, devID):
+#     query = "INSERT INTO user_secrets VALUES(%s, %s, %s)"
+#     values = email, devID, inc
+#     dblink.execute(query, values)
+
+def add_user(email, server_secret):
+    db = get_db
+    dblink = db.cursor()
+    devID = get_new_devID(email, dblink)
     query = "INSERT INTO user_secrets VALUES(%s, %s, %s)"
-    values = email, devID, inc
+    values = email, devID, server_secret
     dblink.execute(query, values)
 
 def get_new_devID (email, dblink):

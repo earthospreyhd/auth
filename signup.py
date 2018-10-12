@@ -11,9 +11,9 @@ def signup (email, pin):
     user_hash = hash256(combined_secret + pin)
     user_hash = bytes_to_string(user_hash)
     # breaks abstraction?
-    db = get_db
-    dblink = db.cursor()
-    add_user(email, server_secret, devID, dblink)
+    # db = get_db
+    # dblink = db.cursor()
+    add_user(email, server_secret)
 
     # email.send_email(,email)
-    return user_hash
+    return info
