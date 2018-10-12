@@ -26,7 +26,7 @@ class cookie ():
         return self.user_hash
 
 
-def gen_combined_secret ():
+def get_combined_secret ():
     combined_secret = pow(2, user_secret * server_secret, PRIME_MODULUS)
 
     return combined_secret
