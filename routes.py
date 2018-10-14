@@ -36,6 +36,7 @@ class api_login(Resource):
         parser = add_argument("devid")
         parser = add_argument("nonce")
         args = parser.parse_args()
+
         login_success = login(
             args["user_secret"],
             args["pin"],
@@ -49,8 +50,9 @@ class api_login(Resource):
             half_increment = increment(user_nonce, args["email"], args["devid"])
             response = {
                 "status": "success",
-                "increment": half_increment
+                "increment": half_increment,
             }
+
         else:
             response = {
                 "status": "failure",
