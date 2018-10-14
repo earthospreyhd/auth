@@ -17,12 +17,13 @@ class api_signup(Resource):
         parser = reqparse.RequestParser()
         parser.add_argument("code")
         args = parser.parse_args()
-        cookie = signup(args)
+        success = None
+        cookie = signup(args, success)
 
-        if success = True:
+        if success == True:
             response_data = {
                 "status": "success",
-                ""
+                "user_hash": cookie
             }
         return response_data
 
@@ -30,11 +31,11 @@ class api_login(Resource):
     def post(self):
         parser = reqparse.RequestParser()
         parser.add_argument("user_hash")
-        parser = add_argument("pin")
-        parser = add_argument("user_secret")
-        parser = add_argument("email")
-        parser = add_argument("devid")
-        parser = add_argument("nonce")
+        parser.add_argument("pin")
+        parser.add_argument("user_secret")
+        parser.add_argument("email")
+        parser.add_argument("devid")
+        parser.add_argument("nonce")
         args = parser.parse_args()
 
         login_success = login(
@@ -47,7 +48,7 @@ class api_login(Resource):
             )
 
         if login_success == True:
-            half_increment = increment(user_nonce, args["email"], args["devid"])
+            half_increment = increment(args["nonce"], args["email"], args["devid"])
             response = {
                 "status": "success",
                 "increment": half_increment,
