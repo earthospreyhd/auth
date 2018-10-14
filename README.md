@@ -1,1 +1,1 @@
-those other commits are by me, apparently updates reset your config
+This is an authentication api which operates off of principles of Diffie Hellman key exchange
