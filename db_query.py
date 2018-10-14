@@ -16,7 +16,7 @@ def get_db():
 #     dblink.execute(query, values)
 
 def add_user(email, server_secret):
-    db = get_db
+    db = get_db()
     dblink = db.cursor()
 
     devID = get_new_devID(email, dblink)
@@ -42,7 +42,9 @@ def set_devID (email, dblink, devID):
     values = devID, email
     dblink.execute(query, values)
 
-def get_server_secret(email, dblink, devID):
+def get_server_secret(email, devID):
+    db = get_db()
+    dblink = db.cursor()
     query = "SELECT Secret FROM user_secrets WHERE Email=%s AND ID=%s"
     values = email, devID
     dblink.execute(query, values)
@@ -50,11 +52,17 @@ def get_server_secret(email, dblink, devID):
     inc = int(inc[0][0])
 
     return inc
-
-def set_server_secret(email, dblink, devID, inc):
+def set_server_secret(email, devID, secret):
+    db = get_db()
+    dblink = db.cursor()
     query = "UPDATE user_secrets SET Secret= %s WHERE Email=%s AND ID=%s"
-    values = inc, email, devID
+    values = secret, email, devID
     dblink.execute(query, values)
+
+# def set_server_secret(email, dblink, devID, inc):
+#     query = "UPDATE user_secrets SET Secret= %s WHERE Email=%s AND ID=%s"
+#     values = inc, email, devID
+#     dblink.execute(query, values)
 
 # def increment (email, dblink, devID):
 #     inc = get_inc(email, dblink,devID)
