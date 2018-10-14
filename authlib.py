@@ -7,6 +7,7 @@ from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives import padding
 from prime_modulus import PRIME_MODULUS
 
+SECRET = 23487230598734098570934875
 # class cookie ():
 
 #     def __init__(self):
@@ -79,21 +80,21 @@ def hash256(text):
 
     return key
 
-# def gen_code (user_email, devID):
-#     code = hash256(str(SECRET) + user_email + str(devID))
-#     code = bytes_to_string(code)
+def gen_code (user_email, devID):
+    code = hash256(str(SECRET) + user_email + str(devID))
+    code = bytes_to_string(code)
 
-#     return code
+    return code
 
-# def verify_code(content, user_email, devID):
-#     code = hash256(str(SECRET) + user_email + str(devID))
-#     code = bytes_to_string(code)
+def verify_code(user_code, user_email, devID):
+    code = hash256(str(SECRET) + user_email + str(devID))
+    code = bytes_to_string(code)
 
-#     if content == code:
-#         return True
+    if user_code == code:
+        return True
 
-#     else:
-#         return False
+    else:
+        return False
 
 def bytes_to_string(bytes_data):
     string = int.from_bytes(bytes_data, byteorder="big")

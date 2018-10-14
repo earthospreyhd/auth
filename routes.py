@@ -4,10 +4,12 @@ from flask import request
 from signup import signup
 from login import login
 from increment import increment
-import authlib
+# import authlib
 import email
 import db_query
 import json
+from code_verification import code_is_valid
+from custom_errors import EmailError, CodeError
 
 app = Flask(__name__)
 api = Api(app)
@@ -16,15 +18,25 @@ class api_signup(Resource):
     def post(self):
         parser = reqparse.RequestParser()
         parser.add_argument("code")
+        parser.add_argument("email")
+        parser.add_argument("pin")
+        parser.add_argument("devid")
         args = parser.parse_args()
-        success = None
-        cookie = signup(args, success)
 
-        if success == True:
+        try:
+            cookie = signup(args["email"], args["pin"], args["devid"], args["code"])
+
             response_data = {
                 "status": "success",
                 "user_hash": cookie
             }
+        except (EmailError, CodeError) as err:
+            response_data = {
+                "status": "failure",
+                "error": err.args
+            }
+
+        
         return response_data
 
 class api_login(Resource):

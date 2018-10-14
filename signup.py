@@ -1,15 +1,25 @@
-from authlib import get_combined_secret, get_new_secret, hash256, bytes_to_string
+from authlib import get_combined_secret, get_new_secret, hash256, bytes_to_string, verify_code
 from db_query import get_db, get_new_devID, add_user
 import json
 import mysql.connector
 import email
+from custom_errors import EmailError, CodeError
 
-def signup (email, pin, success):
-    user_secret = get_new_secret()
-    server_secret = get_new_secret()
-    combined_secret = get_combined_secret(user_secret, server_secret)
-    user_hash = hash256(combined_secret + pin)
-    user_hash = bytes_to_string(user_hash)
-    add_user(email, server_secret)
+def signup (email, pin, devid, code):
+    if (verify_code(code, email, devid) == True):
+
+        user_secret = get_new_secret()
+        server_secret = get_new_secret()
+        combined_secret = get_combined_secret(user_secret, server_secret)
+        user_hash = hash256(combined_secret + pin)
+        user_hash = bytes_to_string(user_hash)
+
+        try:
+            add_user(email, server_secret)
+        except Exception:
+            raise EmailError("an internal error occurred")
+    
+    else:
+        raise CodeError("incorrect code")
 
     return user_hash
