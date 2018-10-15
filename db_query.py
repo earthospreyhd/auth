@@ -48,10 +48,10 @@ def get_server_secret(email, devID):
     query = "SELECT Secret FROM user_secrets WHERE Email=%s AND ID=%s"
     values = email, devID
     dblink.execute(query, values)
-    inc = dblink.fetchall()
-    inc = int(inc[0][0])
+    secret = dblink.fetchall()
+    secret = int(secret[0][0])
 
-    return inc
+    return secret
 def set_server_secret(email, devID, secret):
     db = get_db()
     dblink = db.cursor()

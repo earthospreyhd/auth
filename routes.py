@@ -41,10 +41,11 @@ class api_signup(Resource):
         parser.add_argument("email")
         parser.add_argument("pin")
         parser.add_argument("devid")
+        parser.add_argument("user_secret")
         args = parser.parse_args()
 
         try:
-            cookie = signup(args["email"], args["pin"], args["devid"], args["code"])
+            cookie = signup(args["email"], args["pin"], args["devid"], args["code"], args["user_secret"])
 
             response_data = {
                 "status": "success",
