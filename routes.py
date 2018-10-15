@@ -4,15 +4,35 @@ from flask import request
 from signup import signup
 from login import login
 from increment import increment
-# import authlib
 import email
 import db_query
 import json
-from code_verification import code_is_valid
-from custom_errors import EmailError, CodeError
+from send_code import send_code
+from authlib import gen_code
+from custom_errors import EmailError, CodeError, DataBaseError
 
 app = Flask(__name__)
 api = Api(app)
+
+class api_get_code(Resource):
+    def post(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument("email")
+        parser.add_argument("pin")
+        parser.add_argument("devid")
+        args = parser.parse_args()
+        
+        try:
+            send_code(args["email"], args["pin"], args["devid"])
+            response = {
+                "status": "success"
+            }
+        except EmailError:
+            response = {
+                "status": "failed to send email"
+            }
+        
+        return response
 
 class api_signup(Resource):
     def post(self):
@@ -30,7 +50,7 @@ class api_signup(Resource):
                 "status": "success",
                 "user_hash": cookie
             }
-        except (EmailError, CodeError) as err:
+        except (DataBaseError, CodeError) as err:
             response_data = {
                 "status": "failure",
                 "error": err.args
@@ -76,6 +96,7 @@ class api_login(Resource):
 
 api.add_resource(api_signup, "/api_signup")
 api.add_resource(api_login, "/api_login")
+api.add_resource(api_get_code, "/api_get_code")
 
 if __name__ == "__main__":
     app.run(debug=True)

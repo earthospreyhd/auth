@@ -3,7 +3,7 @@ from db_query import get_db, get_new_devID, add_user
 import json
 import mysql.connector
 import email
-from custom_errors import EmailError, CodeError
+from custom_errors import DataBaseError, CodeError
 
 def signup (email, pin, devid, code):
     if (verify_code(code, email, devid) == True):
@@ -17,7 +17,7 @@ def signup (email, pin, devid, code):
         try:
             add_user(email, server_secret)
         except Exception:
-            raise EmailError("an internal error occurred")
+            raise DataBaseError("an internal error occurred")
     
     else:
         raise CodeError("incorrect code")
