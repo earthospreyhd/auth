@@ -5,17 +5,17 @@ from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes 
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives import padding
-from prime_modulus import PRIME_MODULUS
+from prime_modulus import PRIME_MODULUS, GENERATOR
 
 SECRET = 23487230598734098570934875
 
 def get_half_secret(secret):
-    half_secret = pow(2, secret, PRIME_MODULUS)
+    half_secret = pow(GENERATOR, secret, PRIME_MODULUS)
 
     return half_secret
 
 def new_combined_secret (user_secret, server_secret):
-    combined_secret = pow(2, user_secret * server_secret, PRIME_MODULUS)
+    combined_secret = pow(GENERATOR, user_secret * server_secret, PRIME_MODULUS)
 
     return combined_secret
 
@@ -26,6 +26,7 @@ def get_combined_secret(user_half, server_secret):
 
 def get_new_secret ():
     new_secret = os.urandom(16)
+    new_secret = int.from_bytes(new_secret, byteorder="big")
 
     return new_secret
 

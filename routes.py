@@ -27,9 +27,10 @@ class api_get_code(Resource):
             response = {
                 "status": "success"
             }
-        except EmailError:
+        except EmailError as err:
             response = {
-                "status": "failed to send email"
+                "status": "failed to send email",
+                "error": err.args[0]
             }
         
         return response
@@ -54,7 +55,7 @@ class api_signup(Resource):
         except (DataBaseError, CodeError) as err:
             response_data = {
                 "status": "failure",
-                "error": err.args
+                "error": err.args[0]
             }
 
         
