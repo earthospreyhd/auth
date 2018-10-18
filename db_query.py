@@ -19,12 +19,12 @@ def add_user(email, server_secret):
     db = get_db()
     dblink = db.cursor()
 
-    devID = get_new_devID(email, dblink)
+    devID = get_next_devID(email, dblink)
     query = "INSERT INTO user_secrets VALUES(%s, %s, %s)"
     values = email, devID, server_secret
     dblink.execute(query, values)
 
-def get_new_devID (email, dblink):
+def get_next_devID (email, dblink):
     query = "SELECT ID FROM user_secrets WHERE Email=%s"
     values = email,
     dblink.execute(query, values)
@@ -36,6 +36,14 @@ def get_new_devID (email, dblink):
         devID = devID[0] + 1
 
     return devID
+
+def get_new_devID (email):
+    db = get_db()
+    dblink = db.cursor()
+    
+    devid = get_next_devID(email, dblink)
+
+    return devid
 
 def set_devID (email, dblink, devID):
     query = "UPDATE user_secrets SET devID = %s WHERE Email=%s"

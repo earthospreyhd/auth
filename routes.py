@@ -23,13 +23,14 @@ class api_get_code(Resource):
         args = parser.parse_args()
         
         try:
-            send_code(args["email"], args["pin"], args["devid"])
+            devid = send_code(args["email"], args["pin"], args["devid"])
             response = {
-                "status": "success"
+                "status": "success",
+                "devid": devid
             }
         except EmailError as err:
             response = {
-                "status": "failed to send email",
+                "status": "failure",
                 "error": err.args[0]
             }
         
@@ -42,15 +43,21 @@ class api_signup(Resource):
         parser.add_argument("email")
         parser.add_argument("pin")
         parser.add_argument("devid")
-        parser.add_argument("user_secret")
+        parser.add_argument("user_half_secret")
         args = parser.parse_args()
 
         try:
-            cookie = signup(args["email"], args["pin"], args["devid"], args["code"], args["user_secret"])
+            user_hash = signup(
+                args["email"],
+                args["pin"],
+                args["devid"],
+                args["code"],
+                args["user_half_secret"]
+                )
 
             response_data = {
                 "status": "success",
-                "user_hash": cookie
+                "user_hash": user_hash
             }
         except (DataBaseError, CodeError) as err:
             response_data = {

@@ -6,7 +6,7 @@ import email
 from custom_errors import DataBaseError, CodeError
 
 def signup (email, pin, devid, code, user_half_secret):
-
+#todo: get rid of pin here
     if (verify_code(code, email, devid) == True):
         server_secret = get_new_secret()
         combined_secret = get_combined_secret(user_half_secret, server_secret)
