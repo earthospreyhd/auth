@@ -21,7 +21,7 @@ This common secret is then hashed and stored client side along with the user sec
 
 The user secret and user hash are sent from the user and the common secret is calculated through diffie-hellman:
 
-common_secret = 2<sup>(server_secret)</sup>  mod  PRIME_MODULUS  <sup>(user_secret)</sup>  mod PRIME_MODULUS
+common_secret = 2<sup>(server_secret)</sup><sup>(user_secret)</sup>  mod  PRIME_MODULUS
 
 
 
